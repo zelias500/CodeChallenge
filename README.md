@@ -1,5 +1,5 @@
 ### Solution
-Gulp to start the server @ localhost:3000
+Gulp to start the server @ localhost:3000. Http requests to various routes (listed in app/controllers/home.js) to use the API.
 
 Relevant files:
 * app/models/models.js contains the classes themselves (normally would split them up, but didn't seem necessary here)
