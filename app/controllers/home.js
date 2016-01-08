@@ -9,6 +9,7 @@ module.exports = function (app) {
   app.use('/', router);
 };
 
+// GET index.html with a list of all events
 router.get('/', function (req, res, next) {
   Event.find({})
   .then((events) => {
@@ -20,6 +21,7 @@ router.get('/', function (req, res, next) {
   .then(null, next);
 })
 
+// GET all events
 router.get('/events', function (req, res, next) {
   Event.find({})
   .then((events) => {
@@ -28,6 +30,7 @@ router.get('/events', function (req, res, next) {
   .then(null, next)
 })
 
+// POST to /events to create an Event
 router.post('/events', function (req, res, next) {
   Event.create({
     name: req.body.name,
@@ -51,6 +54,7 @@ router.post('/events/:eventId/:personId', function (req, res, next) {
   .then(null, next)
 })
 
+// GET all persons
 router.get('/persons', function (req, res, next) {
   Person.find({})
   .then((persons) => {
@@ -59,6 +63,7 @@ router.get('/persons', function (req, res, next) {
   .then(null, next)
 })
 
+// POST to /persons to create a new Person
 router.post('/persons', function (req, res, next) {
   Person.create({
     first: req.body.first,
@@ -70,12 +75,18 @@ router.post('/persons', function (req, res, next) {
   .then(null, next)
 })
 
+// GET all invites
 router.get('/invites', function (req, res, next) {
   Invite.find({})
   .then((invites) => {
     res.status(200).json(invites)
   })
 })
+
+/*
+chose not to implement a POST method to create an invite;
+current structure requires that every invite has both an Event and a Person attached to it
+*/
 
 // POST to an invite id to accept that invite, 
 // adding that invite's Person to that Event's list of attendees
