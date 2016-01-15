@@ -18,10 +18,10 @@ var PersonSchema = new Schema({
 
 var InviteSchema = new Schema({
 	person: {type: Schema.Types.ObjectId, ref:'Person'},
-	event: {type: Schema.Types.ObjectId, ref:'Event'}
+	event: {type: Schema.Types.ObjectId, ref:'Event'},
+	attending: {type: String, enum: ['yes', 'no', 'maybe']}
 })
 
 mongoose.model('Event', EventSchema);
 mongoose.model('Person', PersonSchema);
 mongoose.model('Invite', InviteSchema);
-

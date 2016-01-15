@@ -1,8 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  Event = mongoose.model('Event');
-  Person = mongoose.model('Person');
+  Event = mongoose.model('Event'),
+  Person = mongoose.model('Person'),
   Invite = mongoose.model('Invite');
 
 module.exports = function (app) {
@@ -88,18 +88,25 @@ chose not to implement a POST method to create an invite;
 current structure requires that every invite has both an Event and a Person attached to it
 */
 
-// POST to an invite id to accept that invite, 
+// PUT to an invite id to accept that invite, 
 // adding that invite's Person to that Event's list of attendees
-router.post('/invites/:inviteId', function (req, res, next) {
-  var person;
+router.put('/invites/:inviteId', function (req, res, next) {
+  // assume that req.body ===> {attending: one of the strings go here}
+  var person, theInvite, theEvent;
+  console.log(req.body);
   Invite.findById(req.params.inviteId)
   .then((invite) => {
+    theInvite = invite;
     person = invite.person;
     return Event.findById(invite.event);
   })
   .then((event) => {
-    event.addAttendee(person);
-    return event.save();
+    theEvent = event;
+    return Invite.findByIdAndUpdate(theInvite._id, {attending: req.body.attending}, {'new': true})
+  })
+  .then((invite) => {
+    if (req.body.attending === 'yes') theEvent.addAttendee(person);
+    return theEvent.save();
   })
   .then((event) => {
     res.status(200).json(event)
